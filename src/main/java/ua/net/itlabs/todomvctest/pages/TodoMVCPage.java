@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import ua.net.itlabs.core.ConciseAPI;
@@ -15,7 +16,9 @@ import java.util.List;
 //import static ua.net.itlabs.CustomConditions.doubleClick;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static ua.net.itlabs.core.ConciseAPI.*;
+import static ua.net.itlabs.core.CustomConditions.listElementWithCSSClass;
 import static ua.net.itlabs.core.CustomConditions.listElementWithText;
+import static ua.net.itlabs.core.CustomConditions.visibleTextsOf;
 
 public class TodoMVCPage {
     public enum TaskType {
@@ -112,64 +115,50 @@ public class TodoMVCPage {
     }
 
     public WebElement startEdit(String oldTask, String newTask) {
-        WebElement temp = $(listElementWithText(tasks, oldTask), "label");
         doubleClick($(listElementWithText(tasks, oldTask), "label"));
-        $($(temp, ".editing"), ".edit").sendKeys(newTask);
-        //$(listElementWithText(tasks, ".editing"), ".edit").sendKeys(newTask);
-        return $(listElementWithText(tasks, ".editing"), ".edit");
-
-                //tasks.find(cssClass("editing")).find(".edit").setValue(newTask);
-
-
+        $(listElementWithCSSClass(tasks, "editing"), ".edit").clear();
+        $(listElementWithCSSClass(tasks, "editing"), ".edit").sendKeys(newTask);
+        return $(listElementWithCSSClass(tasks, "editing"), ".edit");
     }
 
+    public void delete(String taskText) {
+        hover(listElementWithText(tasks, taskText));
+        $(listElementWithText(tasks, taskText), ".destroy").click();
+    }
 
-
-//
-//    public void delete(String taskText) {
-//        tasks.find(exactText(taskText)).hover();
-//        tasks.find(exactText(taskText)).find(".destroy").click();
-//    }
-
-
-//    public void toggle(String taskText) {
-//        tasks.find(exactText(taskText)).find(".toggle").click();
-//    }
-
+    public void toggle(String taskText) {
+        $(listElementWithText(tasks, taskText), ".toggle").click();
+    }
 
     public void toggleAll() {
         $("#toggle-all").click();
     }
 
-
     public void clearCompleted() {
         $("#clear-completed").click();
     }
-
 
     public void filterAll() {
         $(By.linkText("All")).click();
     }
 
-
     public void filterActive() {
         $(By.linkText("Active")).click();
     }
-
 
     public void filterCompleted() {
         $(By.linkText("Completed")).click();
     }
 
-//    public void assertTasks(String... taskTexts) {
-//        tasks.filter(visible).shouldHave(exactTexts(taskTexts));
-//    }
-//
-//    public void assertNoTasks() {
-//        tasks.filter(visible).shouldBe(empty);
-//    }
-//
-//    public void assertItemsLeft(int count) {
-//        $("#todo-count>strong").shouldHave(exactText(Integer.toString(count)));
-//    }
+    public void assertTasks(String... taskTexts) {
+        assertThat(visibleTextsOf(tasks, taskTexts));
+    }
+
+    public void assertNoTasks() {
+        assertThat(visibleTextsOf(tasks, ""));
+    }
+
+    public void assertItemsLeft(int count) {
+        listElementWithText(By.cssSelector("#todo-count>strong"), Integer.toString(count));
+    }
 }

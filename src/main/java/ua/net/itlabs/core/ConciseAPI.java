@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class ConciseAPI {
@@ -58,10 +59,18 @@ public class ConciseAPI {
     }
 
     public static WebElement $(WebElement parentElement, By innerElementLocator) {
-        return parentElement.findElement(innerElementLocator);
+        return assertThat(visibilityOf(parentElement.findElement(innerElementLocator)));
     }
 
+    public static WebElement $(ExpectedCondition<WebElement> conditionToWaitParentElement) {
+        return assertThat(conditionToWaitParentElement);
 
+    }
+
+public static void hover(ExpectedCondition<WebElement> conditionToWaitParentElement) {
+    Actions action = new Actions(driver);
+    action.moveToElement($(conditionToWaitParentElement)).perform();
+}
 
     public static By byText(String elementText) {
         return By.xpath("//*[text()='" + elementText + "']");
