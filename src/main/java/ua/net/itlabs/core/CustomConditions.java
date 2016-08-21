@@ -6,7 +6,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CustomConditions {
@@ -40,11 +39,18 @@ public class CustomConditions {
 
             public WebElement apply(WebDriver driver) {
                 elements = driver.findElements(listLocator);
-                classes = Helpers.getTexts(elements);
+                classes = new ArrayList<String>();//Helpers.getTexts(elements);
 
                 for (WebElement el: elements) {
-                    if (el.getAttribute("class").contains(cssClass)) {
-                        return el;
+                    classes.add(el.getAttribute("class"));
+                }
+
+                for (int i=0; i< classes.size(); i++) {
+                    String[] classesList = StringUtils.split(classes.get(i), " ");
+                    for (String el: classesList) {
+                        if (el.equals(cssClass)) {
+                            return elements.get(i);
+                        }
                     }
                 }
                 return null;
@@ -60,19 +66,20 @@ public class CustomConditions {
         return elementExceptionsCatcher(new ExpectedCondition<List<WebElement>>() {
             private List<WebElement> elements;
             private List<String> texts;
+            private List<WebElement> visibleElements;
 
             public List<WebElement> apply(WebDriver webDriver) {
                 elements = webDriver.findElements(elementsLocator);
-                texts = new ArrayList<String>();//Collections.emptyList();
+                visibleElements = new ArrayList<WebElement>();
+
                 for (WebElement el: elements) {
                     if (el.isDisplayed()) {
-                        texts.add(el.getText());
+                        visibleElements.add(el);
                     }
                 }
-                if (texts.size() ==0 && expectedTexts.length == 1 && expectedTexts[0].equals("")) {
-                    return elements;
-                }
-                //texts = Helpers.getTexts(elements);
+
+                texts = Helpers.getTexts(visibleElements);
+
                 if (texts.size() != expectedTexts.length) {
                     return null;
                 }
@@ -81,11 +88,37 @@ public class CustomConditions {
                         return null;
                     }
                 }
-                return elements;
+                return visibleElements;
             }
 
             public String toString() {
                 return String.format("texts in list to be %s \n while actual texts are %s \n" , StringUtils.join(expectedTexts, ", "), StringUtils.join(texts, ", "));
+            }
+        });
+    }
+
+    public static ExpectedCondition<Boolean> sizeOfVisible(final By elementsLocator, final int expectedSize) {
+        return elementExceptionsCatcher(new ExpectedCondition<Boolean>() {
+            private List<WebElement> elements;
+            private List<WebElement> visibleElements;
+            private int listSize;
+
+            public Boolean apply(WebDriver webDriver) {
+                elements = webDriver.findElements(elementsLocator);
+                visibleElements = new ArrayList<WebElement>();
+
+                for (WebElement el: elements) {
+                    if (el.isDisplayed()) {
+                        visibleElements.add(el);
+                    }
+                }
+
+                listSize = visibleElements.size();
+                return listSize == expectedSize;
+            }
+
+            public String toString() {
+                return String.format("\nsize of list located by: %s\n to be: %s\n while actual size is: %s\n", elementsLocator, expectedSize, listSize);
             }
         });
     }

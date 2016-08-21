@@ -1,18 +1,18 @@
 package ua.net.itlabs.core;
 
 import com.google.common.base.Function;
-import com.thoughtworks.selenium.Selenium;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
+import static ua.net.itlabs.core.CustomConditions.listElementWithCSSClass;
+import static ua.net.itlabs.todomvctest.pages.TodoMVCPage.tasks;
 
 public class ConciseAPI {
     private static WebDriver driver;
@@ -29,20 +29,30 @@ public class ConciseAPI {
         getWebDriver().get(url);
     }
 
+    public static String url() {
+        return driver.getCurrentUrl();
+    }
+
     public static void refresh() {
         getWebDriver().get(getWebDriver().getCurrentUrl());
     }
+
+//    public static WebElement doubleClick(WebElement onElement) {
+//        (new Actions(driver)).doubleClick(onElement).perform();
+//        return onElement;
+//    }
 
     public static void doubleClick(WebElement onElement) {
         (new Actions(driver)).doubleClick(onElement).perform();
     }
 
-    public static WebElement $(By locator){
-        return assertThat(visibilityOfElementLocated(locator));
-    }
+//    public static WebElement hover(WebElement onElement) {
+//        (new Actions(driver)).moveToElement(onElement).perform();
+//        return onElement;
+//    }
 
-    public static WebElement $(String cssSelector){
-        return $(By.cssSelector(cssSelector));
+    public static void hover(WebElement onElement) {
+        (new Actions(driver)).moveToElement(onElement).perform();
     }
 
     public static WebElement $(ExpectedCondition<WebElement> conditionToWaitParentElement, String innerElementCssSelector) {
@@ -51,7 +61,6 @@ public class ConciseAPI {
 
     public static WebElement $(ExpectedCondition<WebElement> conditionToWaitParentElement, By innerElementLocator) {
          return assertThat(conditionToWaitParentElement).findElement(innerElementLocator);
-
     }
 
     public static WebElement $(WebElement parentElement, String innerElementCssSelector) {
@@ -62,15 +71,27 @@ public class ConciseAPI {
         return assertThat(visibilityOf(parentElement.findElement(innerElementLocator)));
     }
 
-    public static WebElement $(ExpectedCondition<WebElement> conditionToWaitParentElement) {
-        return assertThat(conditionToWaitParentElement);
-
+    public static WebElement $(ExpectedCondition<WebElement> conditionToWaitElement) {
+        return assertThat(conditionToWaitElement);
     }
 
-public static void hover(ExpectedCondition<WebElement> conditionToWaitParentElement) {
-    Actions action = new Actions(driver);
-    action.moveToElement($(conditionToWaitParentElement)).perform();
-}
+    public static WebElement $(By locator){
+        return assertThat(visibilityOfElementLocated(locator));
+    }
+
+    public static WebElement $(String cssSelector){
+        return $(By.cssSelector(cssSelector));
+    }
+
+    public static WebElement setValue(WebElement element, String text) {
+        element.clear();
+        element.sendKeys(text);
+        return element;
+    }
+
+    public static void executeJavascript(String JSstring) {
+        ((JavascriptExecutor)driver).executeScript(JSstring);
+    }
 
     public static By byText(String elementText) {
         return By.xpath("//*[text()='" + elementText + "']");
@@ -78,6 +99,10 @@ public static void hover(ExpectedCondition<WebElement> conditionToWaitParentElem
 
     public static By byTitle(String title) {
         return By.xpath("//*[starts-with(@title,'" + title + "')]");
+    }
+
+    public static By byCSS(String cssSelector) {
+        return By.cssSelector(cssSelector);
     }
 
 //        super(".//*/text()[normalize-space(.) = " + Quotes.escape(elementText) + "]/parent::*");

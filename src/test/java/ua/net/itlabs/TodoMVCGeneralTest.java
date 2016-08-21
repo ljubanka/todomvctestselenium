@@ -1,9 +1,7 @@
 package ua.net.itlabs;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
-import ua.net.itlabs.core.Configuration;
 import ua.net.itlabs.todomvctest.pages.TodoMVCPage;
 import ua.net.itlabs.todomvctest.testconfigs.BaseTest;
 

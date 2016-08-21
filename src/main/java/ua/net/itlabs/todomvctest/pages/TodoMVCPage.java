@@ -4,21 +4,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import ua.net.itlabs.core.ConciseAPI;
-import ua.net.itlabs.core.CustomConditions;
 
-import java.util.List;
-
-
-//import static ua.net.itlabs.CustomConditions.doubleClick;
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static ua.net.itlabs.core.ConciseAPI.*;
-import static ua.net.itlabs.core.CustomConditions.listElementWithCSSClass;
-import static ua.net.itlabs.core.CustomConditions.listElementWithText;
-import static ua.net.itlabs.core.CustomConditions.visibleTextsOf;
+import static ua.net.itlabs.core.CustomConditions.*;
 
 public class TodoMVCPage {
     public enum TaskType {
@@ -36,10 +26,10 @@ public class TodoMVCPage {
         }
     }
 
-    public static By tasks = By.cssSelector("#todo-list>li");
+    public static By tasks = byCSS("#todo-list>li");
 
     public void ensurePageOpened() {
-        if (! ConciseAPI.getWebDriver().getCurrentUrl().equals("https://todomvc4tasj.herokuapp.com/")) {
+        if (! url().equals("https://todomvc4tasj.herokuapp.com/")) {
             open("https://todomvc4tasj.herokuapp.com/");
         }
     }
@@ -71,7 +61,7 @@ public class TodoMVCPage {
         }
         strJS = strJS.substring(0, strJS.length()-2);
         strJS = strJS + "]\")";
-        ((JavascriptExecutor)ConciseAPI.getWebDriver()).executeScript(strJS);
+        executeJavascript(strJS);
         refresh();
     }
 
@@ -109,21 +99,25 @@ public class TodoMVCPage {
 
     public void add(String... taskTexts) {
         for (String text: taskTexts) {
-            assertThat(elementToBeClickable(By.cssSelector("#new-todo")));
-            $("#new-todo").sendKeys(text + Keys.ENTER);
+            //assertThat(elementToBeClickable(By.cssSelector("#new-todo")));
+            $(elementToBeClickable(byCSS("#new-todo"))).sendKeys(text + Keys.ENTER);
         }
     }
 
     public WebElement startEdit(String oldTask, String newTask) {
         doubleClick($(listElementWithText(tasks, oldTask), "label"));
-        $(listElementWithCSSClass(tasks, "editing"), ".edit").clear();
-        $(listElementWithCSSClass(tasks, "editing"), ".edit").sendKeys(newTask);
-        return $(listElementWithCSSClass(tasks, "editing"), ".edit");
+        //return setValue($($(doubleClick($(listElementWithText(tasks, oldTask), "label")), ".editing"), ".edit"), newTask);
+        return setValue($(listElementWithCSSClass(tasks, "editing"), ".edit"), newTask);
+        //return setValue($($(doubleClick($(listElementWithText(tasks, oldTask), "label")), ".editing"), ".edit"), newTask);
+//        $(listElementWithCSSClass(tasks, "editing"), ".edit").clear();
+//        $(listElementWithCSSClass(tasks, "editing"), ".edit").sendKeys(newTask);
+//        return $(listElementWithCSSClass(tasks, "editing"), ".edit");
     }
 
     public void delete(String taskText) {
-        hover(listElementWithText(tasks, taskText));
+        hover($(listElementWithText(tasks, taskText)));
         $(listElementWithText(tasks, taskText), ".destroy").click();
+        //$(hover($(listElementWithText(tasks, taskText))), ".destroy").click();
     }
 
     public void toggle(String taskText) {
@@ -155,10 +149,10 @@ public class TodoMVCPage {
     }
 
     public void assertNoTasks() {
-        assertThat(visibleTextsOf(tasks, ""));
+        assertThat(sizeOfVisible(tasks, 0));
     }
 
     public void assertItemsLeft(int count) {
-        listElementWithText(By.cssSelector("#todo-count>strong"), Integer.toString(count));
+        listElementWithText(byCSS("#todo-count>strong"), Integer.toString(count));
     }
 }
