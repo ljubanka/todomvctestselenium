@@ -19,15 +19,15 @@ import static ua.net.itlabs.core.CustomConditions.listElementWithCSSClass;
 import static ua.net.itlabs.todomvctest.pages.TodoMVCPage.tasks;
 
 public class ConciseAPI {
-    private static WebDriver driver;
+    private static Map<Thread, WebDriver> drivers= new HashMap<Thread, WebDriver>();
 
 
     public static WebDriver getWebDriver() {
-        return driver;
+        return drivers.get(Thread.currentThread());
     }
 
     public static void setWebDriver(WebDriver driver) {
-        ConciseAPI.driver = driver;
+        drivers.put(Thread.currentThread(), driver);
     }
 
     public static void open(String url) {
@@ -91,7 +91,7 @@ public class ConciseAPI {
     }
 
     public static void executeJavascript(String JSstring) {
-        ((JavascriptExecutor)driver).executeScript(JSstring);
+        ((JavascriptExecutor)getWebDriver()).executeScript(JSstring);
     }
 
     public static By byText(String elementText) {
