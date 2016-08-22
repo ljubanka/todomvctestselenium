@@ -11,16 +11,15 @@ import java.util.List;
 public class CustomConditions {
     public static ExpectedCondition<WebElement> listElementWithText(final By listLocator, final String text) {
         return elementExceptionsCatcher(new ExpectedCondition<WebElement>() {
-            private List<WebElement> elements;
             private List<String> texts;
 
             public WebElement apply(WebDriver driver) {
-                elements = driver.findElements(listLocator);
+                List<WebElement> elements = driver.findElements(listLocator);
                 texts = Helpers.getTexts(elements);
 
-                for (WebElement el: elements) {
-                    if (el.getText().equals(text)) {
-                        return el;
+                for (int i=0; i< texts.size(); i++) {
+                    if (texts.get(i).equals(text)) {
+                        return elements.get(i);
                     }
                 }
                 return null;
@@ -34,12 +33,11 @@ public class CustomConditions {
 
     public static ExpectedCondition<WebElement> listElementWithCSSClass(final By listLocator, final String cssClass) {
         return elementExceptionsCatcher(new ExpectedCondition<WebElement>() {
-            private List<WebElement> elements;
             private List<String> classes;
 
             public WebElement apply(WebDriver driver) {
-                elements = driver.findElements(listLocator);
-                classes = new ArrayList<String>();//Helpers.getTexts(elements);
+                List<WebElement> elements = driver.findElements(listLocator);
+                classes = new ArrayList<String>();
 
                 for (WebElement el: elements) {
                     classes.add(el.getAttribute("class"));
@@ -64,20 +62,11 @@ public class CustomConditions {
 
     public static ExpectedCondition<List<WebElement>> visibleTextsOf(final By elementsLocator, final String... expectedTexts) {
         return elementExceptionsCatcher(new ExpectedCondition<List<WebElement>>() {
-            private List<WebElement> elements;
             private List<String> texts;
-            private List<WebElement> visibleElements;
 
-            public List<WebElement> apply(WebDriver webDriver) {
-                elements = webDriver.findElements(elementsLocator);
-                visibleElements = new ArrayList<WebElement>();
-
-                for (WebElement el: elements) {
-                    if (el.isDisplayed()) {
-                        visibleElements.add(el);
-                    }
-                }
-
+            public List<WebElement> apply(WebDriver driver) {
+                List<WebElement> elements = driver.findElements(elementsLocator);
+                List<WebElement> visibleElements = Helpers.getVisibleElements(elements);
                 texts = Helpers.getTexts(visibleElements);
 
                 if (texts.size() != expectedTexts.length) {
@@ -99,19 +88,11 @@ public class CustomConditions {
 
     public static ExpectedCondition<Boolean> sizeOfVisible(final By elementsLocator, final int expectedSize) {
         return elementExceptionsCatcher(new ExpectedCondition<Boolean>() {
-            private List<WebElement> elements;
-            private List<WebElement> visibleElements;
             private int listSize;
 
-            public Boolean apply(WebDriver webDriver) {
-                elements = webDriver.findElements(elementsLocator);
-                visibleElements = new ArrayList<WebElement>();
-
-                for (WebElement el: elements) {
-                    if (el.isDisplayed()) {
-                        visibleElements.add(el);
-                    }
-                }
+            public Boolean apply(WebDriver driver) {
+                List<WebElement> elements = driver.findElements(elementsLocator);
+                List<WebElement> visibleElements = Helpers.getVisibleElements(elements);
 
                 listSize = visibleElements.size();
                 return listSize == expectedSize;

@@ -9,6 +9,10 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 import static ua.net.itlabs.core.CustomConditions.listElementWithCSSClass;
@@ -16,6 +20,7 @@ import static ua.net.itlabs.todomvctest.pages.TodoMVCPage.tasks;
 
 public class ConciseAPI {
     private static WebDriver driver;
+
 
     public static WebDriver getWebDriver() {
         return driver;
@@ -30,29 +35,31 @@ public class ConciseAPI {
     }
 
     public static String url() {
-        return driver.getCurrentUrl();
+        return getWebDriver().getCurrentUrl();
     }
 
     public static void refresh() {
-        getWebDriver().get(getWebDriver().getCurrentUrl());
+        getWebDriver().navigate().refresh();
     }
 
-//    public static WebElement doubleClick(WebElement onElement) {
-//        (new Actions(driver)).doubleClick(onElement).perform();
-//        return onElement;
-//    }
-
-    public static void doubleClick(WebElement onElement) {
-        (new Actions(driver)).doubleClick(onElement).perform();
+    public static Actions actions() {
+        return new Actions(getWebDriver());
     }
 
-//    public static WebElement hover(WebElement onElement) {
-//        (new Actions(driver)).moveToElement(onElement).perform();
-//        return onElement;
-//    }
+    public static WebElement doubleClick(WebElement onElement) {
+        actions().doubleClick(onElement).perform();
+        return onElement;
+    }
 
-    public static void hover(WebElement onElement) {
-        (new Actions(driver)).moveToElement(onElement).perform();
+    public static WebElement hover(WebElement onElement) {
+        actions().moveToElement(onElement).perform();
+        return onElement;
+    }
+
+    public static WebElement setValue(WebElement element, String text) {
+        element.clear();
+        element.sendKeys(text);
+        return element;
     }
 
     public static WebElement $(ExpectedCondition<WebElement> conditionToWaitParentElement, String innerElementCssSelector) {
@@ -81,12 +88,6 @@ public class ConciseAPI {
 
     public static WebElement $(String cssSelector){
         return $(By.cssSelector(cssSelector));
-    }
-
-    public static WebElement setValue(WebElement element, String text) {
-        element.clear();
-        element.sendKeys(text);
-        return element;
     }
 
     public static void executeJavascript(String JSstring) {

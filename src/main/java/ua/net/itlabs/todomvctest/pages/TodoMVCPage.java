@@ -1,10 +1,8 @@
 package ua.net.itlabs.todomvctest.pages;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import ua.net.itlabs.core.ConciseAPI;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static ua.net.itlabs.core.ConciseAPI.*;
@@ -99,25 +97,18 @@ public class TodoMVCPage {
 
     public void add(String... taskTexts) {
         for (String text: taskTexts) {
-            //assertThat(elementToBeClickable(By.cssSelector("#new-todo")));
             $(elementToBeClickable(byCSS("#new-todo"))).sendKeys(text + Keys.ENTER);
         }
     }
 
     public WebElement startEdit(String oldTask, String newTask) {
         doubleClick($(listElementWithText(tasks, oldTask), "label"));
-        //return setValue($($(doubleClick($(listElementWithText(tasks, oldTask), "label")), ".editing"), ".edit"), newTask);
         return setValue($(listElementWithCSSClass(tasks, "editing"), ".edit"), newTask);
-        //return setValue($($(doubleClick($(listElementWithText(tasks, oldTask), "label")), ".editing"), ".edit"), newTask);
-//        $(listElementWithCSSClass(tasks, "editing"), ".edit").clear();
-//        $(listElementWithCSSClass(tasks, "editing"), ".edit").sendKeys(newTask);
-//        return $(listElementWithCSSClass(tasks, "editing"), ".edit");
     }
 
     public void delete(String taskText) {
         hover($(listElementWithText(tasks, taskText)));
         $(listElementWithText(tasks, taskText), ".destroy").click();
-        //$(hover($(listElementWithText(tasks, taskText))), ".destroy").click();
     }
 
     public void toggle(String taskText) {

@@ -14,4 +14,14 @@ public class Helpers {
         }
         return texts;
     }
+
+    public static List<WebElement> getVisibleElements(List<WebElement> elements) {
+        List<WebElement> visibleElements = new ArrayList<WebElement>();
+        for (WebElement el: elements) {
+            if (el.isDisplayed()) {
+                visibleElements.add(el);
+            }
+        }
+        return visibleElements;
+    }
 }
