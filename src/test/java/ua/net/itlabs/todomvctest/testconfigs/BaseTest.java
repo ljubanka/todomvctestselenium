@@ -1,5 +1,6 @@
 package ua.net.itlabs.todomvctest.testconfigs;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -21,8 +22,8 @@ public class BaseTest {
         setWebDriver(new FirefoxDriver());
     }
 
-    @AfterClass
-    public static void finish() {
+    @After
+    public void finish() {
         getWebDriver().quit();
     }
 
