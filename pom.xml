@@ -11,6 +11,10 @@
     <properties>
         <selenium.version>2.53.1</selenium.version>
         <junit.version>4.12</junit.version>
+        <allure-adaptor.version>1.4.2</allure-adaptor.version>
+        <allure-mvn.version>2.5</allure-mvn.version>
+        <aspectj.version>1.8.8</aspectj.version>
+        <surefire.version>2.19</surefire.version>
     </properties>
 
     <dependencies>
@@ -24,7 +28,12 @@
             <artifactId>selenium-java</artifactId>
             <version>${selenium.version}</version>
         </dependency>
-        
+        <dependency>
+            <groupId>ru.yandex.qatools.allure</groupId>
+            <artifactId>allure-junit-adaptor</artifactId>
+            <version>${allure-adaptor.version}</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -36,6 +45,30 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.version}</version>
+                <configuration>
+                    <argLine>
+                        -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"
+                    </argLine>
+
+                    <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>ru.yandex.qatools.allure.junit.AllureRunListener</value>
+                        </property>
+                    </properties>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.aspectj</groupId>
+                        <artifactId>aspectjweaver</artifactId>
+                        <version>${aspectj.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>
