@@ -2,6 +2,7 @@ package ua.net.itlabs;
 
 import org.junit.Test;
 import org.openqa.selenium.Keys;
+import ru.yandex.qatools.allure.annotations.Step;
 import ua.net.itlabs.todomvctest.pages.TodoMVCPage;
 import ua.net.itlabs.todomvctest.testconfigs.BaseTest;
 

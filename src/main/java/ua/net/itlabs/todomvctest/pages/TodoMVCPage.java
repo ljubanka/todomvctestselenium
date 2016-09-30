@@ -3,6 +3,7 @@ package ua.net.itlabs.todomvctest.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import ru.yandex.qatools.allure.annotations.Step;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static ua.net.itlabs.core.ConciseAPI.*;
@@ -95,22 +96,26 @@ public class TodoMVCPage {
         return tasksArray;
     }
 
+    @Step
     public void add(String... taskTexts) {
         for (String text: taskTexts) {
             $(elementToBeClickable(byCSS("#new-todo"))).sendKeys(text + Keys.ENTER);
         }
     }
 
+    @Step
     public WebElement startEdit(String oldTask, String newTask) {
         doubleClick($(listElementWithText(tasks, oldTask), "label"));
         return setValue($(listElementWithCSSClass(tasks, "editing"), ".edit"), newTask);
     }
 
+    @Step
     public void delete(String taskText) {
         hover($(listElementWithText(tasks, taskText)));
         $(listElementWithText(tasks, taskText), ".destroy").click();
     }
 
+    @Step
     public void toggle(String taskText) {
         $(listElementWithText(tasks, taskText), ".toggle").click();
     }
