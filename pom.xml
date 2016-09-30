@@ -11,7 +11,7 @@
     <properties>
         <selenium.version>2.53.1</selenium.version>
         <junit.version>4.12</junit.version>
-        <allure-adaptor.version>1.4.2</allure-adaptor.version>
+        <allure-adaptor.version>1.4.23.HOTFIX1</allure-adaptor.version>
         <allure-mvn.version>2.5</allure-mvn.version>
         <aspectj.version>1.8.8</aspectj.version>
         <surefire.version>2.19</surefire.version>
@@ -33,6 +33,28 @@
             <artifactId>allure-junit-adaptor</artifactId>
             <version>${allure-adaptor.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-api</artifactId>
+                <version>2.6.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>2.6.2</version>
+            </dependency>
 
     </dependencies>
     <build>
@@ -69,6 +91,11 @@
                         <version>${aspectj.version}</version>
                     </dependency>
                 </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.9</version>
             </plugin>
         </plugins>
     </build>
