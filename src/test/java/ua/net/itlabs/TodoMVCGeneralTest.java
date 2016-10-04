@@ -40,31 +40,31 @@ public class TodoMVCGeneralTest extends BaseTest {
         page.assertNoTasks();
     }
 
-//    @Test
-//    public void testFilterFromAllToCompleted() {
-//        page.givenAtAll(page.aTask("1", ACTIVE), page.aTask("2", COMPLETED));
-//
-//        page.filterCompleted();
-//        page.assertTasks("2");
-//        page.assertItemsLeft(1);
-//    }
-//
-//    @Test
-//    public void testFilterFromActiveToAll() {
-//        page.givenAtActive(page.aTask("1", ACTIVE), page.aTask("2", COMPLETED));
-//
-//        page.filterAll();
-//        page.assertTasks("1", "2");
-//        page.assertItemsLeft(1);
-//    }
-//
-//    @Test
-//    public void testFilterFromCompletedToActive() {
-//        page.givenAtCompleted(page.aTask("1", ACTIVE), page.aTask("2", COMPLETED));
-//
-//        page.filterActive();
-//        page.assertTasks("1");
-//        page.assertItemsLeft(1);
-//    }
+    @Test
+    public void testFilterFromAllToCompleted() {
+        page.givenAtAll(page.aTask("1", ACTIVE), page.aTask("2", COMPLETED));
+
+        page.filterCompleted();
+        page.assertTasks("2");
+        page.assertItemsLeft(1);
+    }
+
+    @Test
+    public void testFilterFromActiveToAll() {
+        page.givenAtActive(page.aTask("1", ACTIVE), page.aTask("2", COMPLETED));
+
+        page.filterAll();
+        page.assertTasks("1", "2");
+        page.assertItemsLeft(1);
+    }
+
+    @Test
+    public void testFilterFromCompletedToActive() {
+        page.givenAtCompleted(page.aTask("1", ACTIVE), page.aTask("2", COMPLETED));
+
+        page.filterActive();
+        page.assertTasks("1");
+        page.assertItemsLeft(1);
+    }
 
 }
