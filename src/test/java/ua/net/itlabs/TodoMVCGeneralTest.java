@@ -1,8 +1,10 @@
 package ua.net.itlabs;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.Keys;
 import ru.yandex.qatools.allure.annotations.Step;
+import ua.net.itlabs.categories.Smoke;
 import ua.net.itlabs.todomvctest.pages.TodoMVCPage;
 import ua.net.itlabs.todomvctest.testconfigs.BaseTest;
 
@@ -15,6 +17,7 @@ public class TodoMVCGeneralTest extends BaseTest {
     TodoMVCPage page = new TodoMVCPage();
 
     @Test
+    @Category(Smoke.class)
     public void testTasksCommonFlow() {
         page.givenAtAll();
 

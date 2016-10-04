@@ -149,6 +149,6 @@ public class TodoMVCPage {
     }
 
     public void assertItemsLeft(int count) {
-        listElementWithText(byCSS("#todo-count>strong"), Integer.toString(count));
+        assertThat(listElementWithText(byCSS("#todo-count>strong"), Integer.toString(count)));
     }
 }

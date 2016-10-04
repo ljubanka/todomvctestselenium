@@ -1,7 +1,10 @@
 package ua.net.itlabs;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.Keys;
+import ua.net.itlabs.categories.Buggy;
+import ua.net.itlabs.categories.Smoke;
 import ua.net.itlabs.todomvctest.pages.TodoMVCPage;
 import ua.net.itlabs.todomvctest.testconfigs.BaseTest;
 
@@ -14,6 +17,7 @@ public class TodoMVCAllFilterTest extends BaseTest {
     TodoMVCPage page = new TodoMVCPage();
 
     @Test
+    @Category(Smoke.class)
     public void testComplete() {
         page.givenAtAll(ACTIVE, "1", "2");
 
@@ -23,12 +27,13 @@ public class TodoMVCAllFilterTest extends BaseTest {
     }
 
     @Test
+    @Category(Buggy.class)
     public void testReopen() {
         page.givenAtAll(COMPLETED, "1", "2");
 
         page.toggle("2");
         page.assertTasks("1", "2");
-        page.assertItemsLeft(1);
+        page.assertItemsLeft(2);
     }
 
     @Test
@@ -41,6 +46,7 @@ public class TodoMVCAllFilterTest extends BaseTest {
     }
 
     @Test
+    @Category(Smoke.class)
     public void testClearCompleted() {
         page.givenAtAll(COMPLETED, "1", "2", "3");
 
